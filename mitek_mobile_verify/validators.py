@@ -41,7 +41,7 @@ def is_string_value_list(l):
 
     Check if the dict is compatible with SOAP type ArrayOfstring.
     """
-    if all([is_string(item) for item in l]):
+    if isinstance(l, list) and all([is_string(item) for item in l]):
         return True
     return False
 

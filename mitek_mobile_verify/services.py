@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from zeep import Client
-from zeep import xsd
 from zeep.wsse.username import UsernameToken
 
 __author__ = 'lundberg'
@@ -14,23 +13,12 @@ class MitekMobileVerifyService(object):
         self.client = Client(wsdl=wsdl, wsse=self.authentication, transport=transport, service_name=service_name,
                              port_name=port_name, plugins=plugins)
 
-
-    def create_advanced_request(self):
-        # ResponseImageTypes: ArrayOfstring, BackImage: Image, ExpectedName: Name, FrontImage: Image, IssueDate: xsd:dateTime, StateAbbr: xsd:string, EsfDetection: ESFDetection
-        request = {
-            'ResponseImageTypes': None,
-            'BackImage': None,
-            'ExpectedName': None,
-            'FrontImage': None,
-            'IssueDate': None,
-            'StateAbbr': None,
-            'EsfDetection': None
+    def verify(self, request, device_metadata=dict, metadata=dict, mibi_data_header=dict):
+        headers = {
+            'DeviceMetaData': device_metadata,
+            'Metadata': metadata,
+            'MibiDataHeader': mibi_data_header
         }
-
-        pass
-
-    def verify(self, request):
         # Verify(DocumentRequest: DocumentRequest, _soapheaders={DeviceMetaData: DeviceMetaData(), Metadata: Metadata(), MibiDataHeader: MibiDataHeader()})
-        pass
-
+        self.client.service.Verify(request.create_request_dict(), _soapheaders=[headers])
 
