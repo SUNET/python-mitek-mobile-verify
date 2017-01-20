@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from mitek_mobile_verify import validators
+from mitek_mobile_verify.models import validators
 
 __author__ = 'lundberg'
 
@@ -142,80 +142,3 @@ class ESFDetection(BasicModel):
         if not validators.is_bool(b):
             raise TypeError('Value needs to be of type bool')
         self.data['PerformedEvaluation'] = b
-
-
-class DeviceMetaData(BasicModel):
-    def __init__(self, browser, device, operating_system, raw_data):
-        """
-        :param browser: Browser
-        :type browser: str
-        :param device: Device
-        :type device: str
-        :param operating_system: Operating system
-        :type operating_system: str
-        :param raw_data: Raw data
-        :type raw_data: str
-        """
-
-        self.data = {}
-        self.browser = browser
-        self.device = device
-        self.operating_system = operating_system
-        self.raw_data = raw_data
-
-    @property
-    def browser(self):
-        return self.data.get('Browser')
-
-    @browser.setter
-    def browser(self, s):
-        if not validators.is_string(s):
-            raise TypeError('Value needs to be of type str')
-        self.data['Browser'] = s
-
-    @property
-    def device(self):
-        return self.data.get('Device')
-
-    @device.setter
-    def device(self, s):
-        if not validators.is_string(s):
-            raise TypeError('Value needs to be of type str')
-        self.data['Device'] = s
-
-    @property
-    def operating_system(self):
-        return self.data.get('OperatingSystem')
-
-    @operating_system.setter
-    def operating_system(self, s):
-        if not validators.is_string(s):
-            raise TypeError('Value needs to be of type str')
-        self.data['OperatingSystem'] = s
-
-    @property
-    def raw_data(self):
-        return self.data.get('RawData')
-
-    @raw_data.setter
-    def raw_data(self, s):
-        if not validators.is_string(s):
-            raise TypeError('Value needs to be of type str')
-        self.data['RawData'] = s
-
-
-class MibiDataHeader(BasicModel):
-
-    def __init__(self, mibi_data):
-        self.data = {}
-        self.mibi_data = mibi_data
-
-    @property
-    def mibi_data(self):
-        return self.data.get('MibiData')
-
-    @mibi_data.setter
-    def mibi_data(self, s):
-        if not validators.is_string(s):
-            raise TypeError('Value needs to be of type str')
-        self.data['MibiData'] = s

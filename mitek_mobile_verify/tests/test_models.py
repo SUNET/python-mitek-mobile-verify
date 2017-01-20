@@ -3,8 +3,8 @@
 import unittest
 import base64
 from datetime import datetime
-from mitek_mobile_verify import models
-from mitek_mobile_verify.requests import PhotoVerifyAdvancedRequest
+from mitek_mobile_verify.models import base
+from mitek_mobile_verify.models.requests import PhotoVerifyAdvancedRequest
 
 __author__ = 'lundberg'
 
@@ -42,7 +42,6 @@ class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
             }
         }
 
-
     def test_response_image_types(self):
         self.request.response_image_types = ['image_type1']
         self.assertEqual(['image_type1'], self.request.response_image_types)
@@ -60,7 +59,7 @@ class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
 
     def test_back_image(self):
 
-        image = models.Image(hints=[{'hint1': 'a hint'}], image_data=base64.b64encode(b'base64str'))
+        image = base.Image(hints=[{'hint1': 'a hint'}], image_data=base64.b64encode(b'base64str'))
         self.request.back_image = image
         self.assertEqual(self.request.back_image, image)
 
@@ -72,7 +71,7 @@ class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
 
     def test_expected_name(self):
 
-        name = models.Name(first_name='Test', last_name='Testsson', middle_name='Testaren', suffix='III')
+        name = base.Name(first_name='Test', last_name='Testsson', middle_name='Testaren', suffix='III')
         self.request.expected_name = name
         self.assertEqual(self.request.expected_name, name)
 
@@ -83,7 +82,7 @@ class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
         self.assertRaises(TypeError, self.request.expected_name, 'test')
 
     def test_front_image(self):
-        image = models.Image(hints=[{'hint1': 'a hint'}], image_data=base64.b64encode(b'base64str'))
+        image = base.Image(hints=[{'hint1': 'a hint'}], image_data=base64.b64encode(b'base64str'))
         self.request.front_image = image
         self.assertEqual(self.request.front_image, image)
 
@@ -108,7 +107,7 @@ class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
         self.assertRaises(TypeError, self.request.issue_date, 123)
 
     def test_esf_detection(self):
-        esf_detection = models.ESFDetection(extracted_data=[{'some': 'data'}], performed_evaluation=True)
+        esf_detection = base.ESFDetection(extracted_data=[{'some': 'data'}], performed_evaluation=True)
         self.request.esf_detection = esf_detection
         self.assertEqual(self.request.esf_detection, esf_detection)
 

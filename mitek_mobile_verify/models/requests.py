@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from mitek_mobile_verify import models, validators
+from mitek_mobile_verify.models import base
+from mitek_mobile_verify.models import validators
 
 __author__ = 'lundberg'
 
@@ -28,9 +29,9 @@ class PhotoVerifyBaseRequest(object):
         :param suffix: Suffix
         :type suffix: str
         :return: Name object
-        :rtype: mitek_mobile_verify.models.Name
+        :rtype: mitek_mobile_verify.base.Name
         """
-        return models.Name(first_name=first_name, last_name=last_name, middle_name=middle_name, suffix=suffix)
+        return base.Name(first_name=first_name, last_name=last_name, middle_name=middle_name, suffix=suffix)
 
     @staticmethod
     def create_image(hints, image_data):
@@ -40,9 +41,9 @@ class PhotoVerifyBaseRequest(object):
         :param image_data: Image as base64 encoded string
         :type image_data: str
         :return: Image object
-        :rtype: mitek_mobile_verify.models.Image
+        :rtype: mitek_mobile_verify.base.Image
         """
-        return models.Image(hints=hints, image_data=image_data)
+        return base.Image(hints=hints, image_data=image_data)
 
 
 class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
@@ -53,17 +54,17 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
         :param response_image_types: Image types
         :type response_image_types: list
         :param back_image: Back image
-        :type back_image: mitek_mobile_verify.models.Image
+        :type back_image: mitek_mobile_verify.base.Image
         :param expected_name: Expected name
-        :type expected_name: mitek_mobile_verify.models.Name
+        :type expected_name: mitek_mobile_verify.base.Name
         :param front_image: Front image
-        :type front_image: mitek_mobile_verify.models.Image
+        :type front_image: mitek_mobile_verify.base.Image
         :param issue_date: Issue date
         :type issue_date: datetime.Datetime
         :param state_abbr: State abbreviation
         :type state_abbr: str
         :param esf_detection: ESF data
-        :type esf_detection: mitek_mobile_verify.models.ESFDetection
+        :type esf_detection: mitek_mobile_verify.base.ESFDetection
         """
         self.response_image_types = response_image_types
         self.back_image = back_image
@@ -95,10 +96,10 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
     def back_image(self, image):
         """
         :param image: Image object
-        :type image: mitek_mobile_verify.models.Image
+        :type image: mitek_mobile_verify.base.Image
         """
-        if not isinstance(image, models.Image):
-            raise ValueError('Value needs to by of type mitek_mobile_verify.models.Image')
+        if not isinstance(image, base.Image):
+            raise ValueError('Value needs to by of type mitek_mobile_verify.base.Image')
         self.data['BackImage'] = image
 
     @property
@@ -109,10 +110,10 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
     def expected_name(self, name):
         """
         :param name: Name object
-        :type name: mitek_mobile_verify.models.Name
+        :type name: mitek_mobile_verify.base.Name
         """
-        if not isinstance(name, models.Name):
-            raise ValueError('Value needs to by of type mitek_mobile_verify.models.Name')
+        if not isinstance(name, base.Name):
+            raise ValueError('Value needs to by of type mitek_mobile_verify.base.Name')
         self.data['ExpectedName'] = name
 
     @property
@@ -123,10 +124,10 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
     def front_image(self, image):
         """
         :param image: Image object
-        :type image: mitek_mobile_verify.models.Image
+        :type image: mitek_mobile_verify.base.Image
         """
-        if not isinstance(image, models.Image):
-            raise ValueError('Value needs to by of type mitek_mobile_verify.models.Image')
+        if not isinstance(image, base.Image):
+            raise ValueError('Value needs to by of type mitek_mobile_verify.base.Image')
         self.data['FrontImage'] = image
 
     @property
@@ -165,10 +166,10 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
     def esf_detection(self, esf_detection):
         """
         :param esf_detection: ESFDetection object
-        :type esf_detection: mitek_mobile_verify.models.ESFDetection
+        :type esf_detection: mitek_mobile_verify.base.ESFDetection
         """
-        if not isinstance(esf_detection, models.ESFDetection):
-            raise ValueError('Value needs to by of type mitek_mobile_verify.models.ESFDetection')
+        if not isinstance(esf_detection, base.ESFDetection):
+            raise ValueError('Value needs to by of type mitek_mobile_verify.base.ESFDetection')
         self.data['ESFDetection'] = esf_detection
 
     @staticmethod
@@ -179,9 +180,9 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
         :param performed_evaluation: Performed evaluation
         :type performed_evaluation: bool
         :return: ESFDetection object
-        :rtype: mitek_mobile_verify.models.ESFDetection
+        :rtype: mitek_mobile_verify.base.ESFDetection
         """
-        return models.ESFDetection(extracted_data=extracted_data, performed_evaluation=performed_evaluation)
+        return base.ESFDetection(extracted_data=extracted_data, performed_evaluation=performed_evaluation)
 
     def to_dict(self):
         d = {
@@ -191,7 +192,7 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
         }
 
         for key, value in self.data.items():
-            if isinstance(value, models.BasicModel):
+            if isinstance(value, base.BasicModel):
                 value = value.to_dict()
             d['DocumentRequest'][key] = value
         return d
