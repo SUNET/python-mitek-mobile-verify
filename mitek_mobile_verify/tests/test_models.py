@@ -9,7 +9,6 @@ from mitek_mobile_verify.models.requests import PhotoVerifyAdvancedRequest
 __author__ = 'lundberg'
 
 
-
 class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
 
     def setUp(self):
