@@ -3,6 +3,8 @@
 from zeep import Client
 from zeep.wsse.username import UsernameToken
 
+from mitek_mobile_verify.models.requests import PhotoVerifyAdvancedRequest
+
 __author__ = 'lundberg'
 
 
@@ -12,6 +14,19 @@ class MitekMobileVerifyService(object):
         self.authentication = UsernameToken(username, password, use_digest=False)  # XXX digest true or false?
         self.client = Client(wsdl=wsdl, wsse=self.authentication, transport=transport, service_name=service_name,
                              port_name=port_name, plugins=plugins)
+
+    def _prepare_request(self, request):
+        """
+        :param request: Request object
+        :type request: mitek_mobile_verify.models.requests.PhotoVerifyBaseRequest
+        :return: Schema object
+        :rtype: zeep.objects.PhotoVerifyAdvancedRequest
+        """
+        if isinstance(request, PhotoVerifyAdvancedRequest):
+            req = self.client.get_type('ns2:PhotoVerifyAdvancedRequest')
+            return req(**request.to_dict())
+
+        raise NotImplementedError('Request of type {} not implemented'.format(type(request)))
 
     def verify(self, request, device_metadata, metadata, mibi_data_header):
         """
@@ -31,6 +46,6 @@ class MitekMobileVerifyService(object):
             'Metadata': metadata.to_dict(),
             'MibiDataHeader': mibi_data_header.to_dict()
         }
-        # Verify(DocumentRequest: DocumentRequest, _soapheaders={DeviceMetaData: DeviceMetaData(), Metadata: Metadata(), MibiDataHeader: MibiDataHeader()})
-        self.client.service.Verify(request.create_request_dict(), _soapheaders=headers)
+        prepered_request = self._prepare_request(request)
+        self.client.service.Verify(prepered_request, _soapheaders=headers)
 

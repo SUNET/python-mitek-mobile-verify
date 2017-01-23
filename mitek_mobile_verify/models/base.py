@@ -34,7 +34,13 @@ class Image(BasicModel):
     def hints(self, l):
         if not all([validators.is_string_value_dict(item) for item in l]):
             raise TypeError('All dict value needs to be of type str')
-        self.data['Hints'] = l
+        d = {
+            'KeyValueOfstringstring': []
+        }
+        for item in l:
+            for key, value in item.items():
+                d['KeyValueOfstringstring'].append({'Key': key, 'Value': value})
+        self.data['Hints'] = d
 
     @property
     def image_data(self):
@@ -130,8 +136,14 @@ class ESFDetection(BasicModel):
     @extracted_data.setter
     def extracted_data(self, l):
         if not all([validators.is_string_value_dict(item) for item in l]):
-            raise TypeError('All dict values needs to be of type str')
-        self.data['ExtractedData'] = l
+            raise TypeError('All dict value needs to be of type str')
+        d = {
+            'KeyValueOfstringstring': []
+        }
+        for item in l:
+            for key, value in item.items():
+                d['KeyValueOfstringstring'].append({'Key': key, 'Value': value})
+        self.data['ExtractedData'] = d
 
     @property
     def performed_evaluation(self):

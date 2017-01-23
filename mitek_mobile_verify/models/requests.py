@@ -15,7 +15,7 @@ class PhotoVerifyBaseRequest(object):
         raise NotImplemented()
 
     def create_request_dict(self):
-        return {'PhotoVerifyBaseRequest': self.to_dict()}
+        return self.to_dict()
 
     @staticmethod
     def create_name(first_name, last_name, middle_name, suffix):
@@ -86,7 +86,13 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
         """
         if not validators.is_string_value_list(l):
             raise TypeError('All list items needs to be of type str')
-        self.data['ResponseImageTypes'] = l
+
+        d = {
+            'string': []
+        }
+        for item in l:
+            d['string'].append(item)
+        self.data['ResponseImageTypes'] = d
 
     @property
     def back_image(self):
@@ -160,7 +166,7 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
 
     @property
     def esf_detection(self):
-        return self.data.get('ESFDetection')
+        return self.data.get('EsfDetection')
 
     @esf_detection.setter
     def esf_detection(self, esf_detection):
@@ -170,7 +176,7 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
         """
         if not isinstance(esf_detection, base.ESFDetection):
             raise ValueError('Value needs to by of type mitek_mobile_verify.base.ESFDetection')
-        self.data['ESFDetection'] = esf_detection
+        self.data['EsfDetection'] = esf_detection
 
     @staticmethod
     def create_esf_detection(extracted_data, performed_evaluation):
@@ -185,14 +191,9 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
         return base.ESFDetection(extracted_data=extracted_data, performed_evaluation=performed_evaluation)
 
     def to_dict(self):
-        d = {
-            'DocumentRequest': {
-                'type': 'PhotoVerifyAdvancedRequest'
-            }
-        }
-
+        d = {}
         for key, value in self.data.items():
             if isinstance(value, base.BasicModel):
                 value = value.to_dict()
-            d['DocumentRequest'][key] = value
+            d[key] = value
         return d

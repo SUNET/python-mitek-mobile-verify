@@ -14,42 +14,55 @@ class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
     def setUp(self):
         self.request = PhotoVerifyAdvancedRequest()
         self.ref_dict = {
-            'PhotoVerifyBaseRequest': {
-                'DocumentRequest': {
-                    'BackImage': {
-                        'Hints': [{'hint1': 'a hint'}],
-                        'ImageData': b'YmFzZTY0c3Ry'
-                    },
-                    'ESFDetection': {
-                        'ExtractedData': [{'some': 'data'}],
-                        'PerformedEvaluation': True
-                    },
-                    'ExpectedName': {
-                        'FirstName': 'Test',
-                        'LastName': 'Testsson',
-                        'MiddleName': 'Testaren',
-                        'Suffix': 'III'
-                    },
-                    'FrontImage': {
-                        'Hints': [{'hint1': 'a hint'}], 'ImageData': b'YmFzZTY0c3Ry'
-                    },
-                    'IssueDate': datetime(2017, 1, 19, 16, 41, 47, 188358),
-                    'ResponseImageTypes': ['image_type1', 'image_type2'],
-                    'StateAbbr': 'AL',
-                    'type': 'PhotoVerifyAdvancedRequest'
+            'BackImage': {
+                'Hints': {
+                    'KeyValueOfstringstring': [
+                        {'Key': 'hint1', 'Value': 'a hint'}
+                    ]
                 },
-            }
+                'ImageData': b'YmFzZTY0c3Ry'
+            },
+            'EsfDetection': {
+                'ExtractedData': {
+                    'KeyValueOfstringstring': [
+                        {'Key': 'some', 'Value': 'data'}
+                    ]
+                },
+                'PerformedEvaluation': True
+            },
+            'ExpectedName': {
+                'FirstName': 'Test',
+                'LastName': 'Testsson',
+                'MiddleName': 'Testaren',
+                'Suffix': 'III'
+            },
+            'FrontImage': {
+                'Hints': {
+                    'KeyValueOfstringstring': [
+                        {'Key': 'hint1', 'Value': 'a hint'}
+                    ]
+                },
+                'ImageData': b'YmFzZTY0c3Ry'
+            },
+            'IssueDate': datetime(2017, 1, 23, 14, 3, 16, 76723),
+            'ResponseImageTypes': {
+                'string': [
+                    'image_type1',
+                    'image_type2'
+                ]
+            },
+            'StateAbbr': 'AL'
         }
 
     def test_response_image_types(self):
         self.request.response_image_types = ['image_type1']
-        self.assertEqual(['image_type1'], self.request.response_image_types)
+        self.assertEqual({'string': ['image_type1']}, self.request.response_image_types)
 
         self.request.response_image_types = ['image_type2']
-        self.assertEqual(['image_type2'], self.request.response_image_types)
+        self.assertEqual({'string': ['image_type2']}, self.request.response_image_types)
 
         self.request.response_image_types = ['image_type1', 'image_type2']
-        self.assertEqual(['image_type1', 'image_type2'], self.request.response_image_types)
+        self.assertEqual({'string': ['image_type1', 'image_type2']}, self.request.response_image_types)
 
         self.assertRaises(TypeError, self.request.response_image_types, 'test')
         self.assertRaises(TypeError, self.request.response_image_types, {})
@@ -131,7 +144,7 @@ class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
         self.request.load(response_image_types, back_image, expected_name, front_image, issue_date, state_abbr,
                           esf_detection)
 
-        self.assertEqual(self.request.response_image_types, response_image_types)
+        self.assertEqual(self.request.response_image_types['string'], response_image_types)
         self.assertEqual(self.request.back_image, back_image)
         self.assertEqual(self.request.expected_name, expected_name)
         self.assertEqual(self.request.front_image, front_image)
@@ -145,7 +158,7 @@ class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
         expected_name = self.request.create_name(first_name='Test', last_name='Testsson', middle_name='Testaren',
                                                  suffix='III')
         front_image = self.request.create_image(hints=[{'hint1': 'a hint'}], image_data=base64.b64encode(b'base64str'))
-        issue_date = datetime(2017, 1, 19, 16, 41, 47, 188358)
+        issue_date = datetime(2017, 1, 23, 14, 3, 16, 76723)
         state_abbr = 'AL'
         esf_detection = self.request.create_esf_detection(extracted_data=[{'some': 'data'}], performed_evaluation=True)
 
