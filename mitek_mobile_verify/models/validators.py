@@ -8,13 +8,13 @@ __author__ = 'lundberg'
 
 
 def is_string(s):
-    if isinstance(s, six.string_types):
+    if s is None or isinstance(s, six.string_types):
         return True
     return False
 
 
 def is_bool(b):
-    if isinstance(b, bool):
+    if b is None or isinstance(b, bool):
         return True
     return False
 
@@ -41,7 +41,7 @@ def is_string_value_list(l):
 
     Check if the dict is compatible with SOAP type ArrayOfstring.
     """
-    if isinstance(l, list) and all([is_string(item) for item in l]):
+    if l is None or isinstance(l, list) and all([is_string(item) for item in l]):
         return True
     return False
 
@@ -55,6 +55,6 @@ def is_string_value_dict(d):
 
     Check if the dict is compatible with SOAP type KeyValueOfstringstring.
     """
-    if all([is_string(v) for v in d.values()]):
+    if d is None or all([is_string(v) for v in d.values()]):
         return True
     return False

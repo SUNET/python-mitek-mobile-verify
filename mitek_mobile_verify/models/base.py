@@ -15,16 +15,16 @@ class BasicModel(object):
 
 class Image(BasicModel):
 
-    def __init__(self, hints, image_data):
+    def __init__(self, image_data, hints=None):
         """
-        :param hints: Hints
-        :type hints: list
         :param image_data: Image as base64 encoded string
         :type image_data: str
+        :param hints: Hints
+        :type hints: list|None
         """
         self.data = {}
-        self.hints = hints
         self.image_data = image_data
+        self.hints = hints
 
     @property
     def hints(self):
@@ -32,8 +32,13 @@ class Image(BasicModel):
 
     @hints.setter
     def hints(self, l):
+        if l is None:
+            self.data['Hints'] = None
+            return
+
         if not all([validators.is_string_value_dict(item) for item in l]):
             raise TypeError('All dict value needs to be of type str')
+
         d = {
             'KeyValueOfstringstring': []
         }
@@ -56,16 +61,16 @@ class Image(BasicModel):
 
 class Name(BasicModel):
 
-    def __init__(self, first_name, last_name, middle_name='', suffix=''):
+    def __init__(self, first_name=None, last_name=None, middle_name=None, suffix=None):
         """
         :param first_name: First name
-        :type first_name: str
+        :type first_name: str|None
         :param last_name: Last name
-        :type last_name: str
+        :type last_name: str|None
         :param middle_name: Middle name
-        :type middle_name: str
+        :type middle_name: str|None
         :param suffix: Suffix
-        :type suffix: str
+        :type suffix: str|None
         """
 
         self.data = {}
@@ -117,7 +122,7 @@ class Name(BasicModel):
 
 class ESFDetection(BasicModel):
 
-    def __init__(self, extracted_data, performed_evaluation):
+    def __init__(self, extracted_data=None, performed_evaluation=False):
         """
         :param extracted_data: Extracted data
         :type extracted_data: list
@@ -135,6 +140,9 @@ class ESFDetection(BasicModel):
 
     @extracted_data.setter
     def extracted_data(self, l):
+        if l is None:
+            self.data['ExtractedData'] = None
+            return
         if not all([validators.is_string_value_dict(item) for item in l]):
             raise TypeError('All dict value needs to be of type str')
         d = {

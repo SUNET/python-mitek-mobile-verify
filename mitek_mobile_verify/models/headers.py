@@ -7,16 +7,16 @@ __author__ = 'lundberg'
 
 
 class DeviceMetaData(BasicModel):
-    def __init__(self, browser, device, operating_system, raw_data):
+    def __init__(self, browser=None, device=None, operating_system=None, raw_data=None):
         """
         :param browser: Browser
-        :type browser: str
+        :type browser: str|None
         :param device: Device
-        :type device: str
+        :type device: str|None
         :param operating_system: Operating system
-        :type operating_system: str
+        :type operating_system: str|None
         :param raw_data: Raw data
-        :type raw_data: str
+        :type raw_data: str|None
         """
 
         self.data = {}
@@ -90,16 +90,16 @@ class MibiDataHeader(BasicModel):
 
 class WebRequestMetadataHeader(BasicModel):
 
-    def __init__(self, application_token, session_reference_id, tenant_reference, version):
+    def __init__(self, application_token=None, session_reference_id=None, tenant_reference=None, version=None):
         """
         :param application_token: Application token
-        :type application_token: str
+        :type application_token: str|None
         :param session_reference_id: Session reference ID
-        :type session_reference_id: str
+        :type session_reference_id: str|None
         :param tenant_reference: Tenant Reference
-        :type tenant_reference: str
+        :type tenant_reference: str|None
         :param version: Version
-        :type version: str
+        :type version: str|None
         """
         self.data = {}
         self.application_token = application_token

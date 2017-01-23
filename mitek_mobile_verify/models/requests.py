@@ -12,7 +12,7 @@ class PhotoVerifyBaseRequest(object):
         self.data = {}
 
     @staticmethod
-    def create_name(first_name, last_name, middle_name, suffix):
+    def create_name(first_name=None, last_name=None, middle_name=None, suffix=None):
         """
         :param first_name: First name
         :type first_name: str
@@ -28,16 +28,16 @@ class PhotoVerifyBaseRequest(object):
         return base.Name(first_name=first_name, last_name=last_name, middle_name=middle_name, suffix=suffix)
 
     @staticmethod
-    def create_image(hints, image_data):
+    def create_image(image_data, hints=None):
         """
-        :param hints: Image hints
-        :type hints: list
         :param image_data: Image as base64 encoded string
         :type image_data: str
+        :param hints: Image hints
+        :type hints: list
         :return: Image object
         :rtype: mitek_mobile_verify.base.Image
         """
-        return base.Image(hints=hints, image_data=image_data)
+        return base.Image(image_data=image_data, hints=hints)
 
     def to_dict(self):
         d = {}
@@ -82,6 +82,10 @@ class PhotoVerifyRequest(PhotoVerifyBaseRequest):
         :param l: List of strings
         :type l: list
         """
+        if l is None:
+            self.data['ResponseImageTypes'] = None
+            return
+
         if not validators.is_string_value_list(l):
             raise TypeError('All list items needs to be of type str')
 
@@ -201,7 +205,7 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyRequest):
         self.data['EsfDetection'] = esf_detection
 
     @staticmethod
-    def create_esf_detection(extracted_data, performed_evaluation):
+    def create_esf_detection(extracted_data=None, performed_evaluation=False):
         """
         :param extracted_data: Extracted data
         :type extracted_data: list
