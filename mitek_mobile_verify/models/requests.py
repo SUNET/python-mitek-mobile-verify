@@ -11,12 +11,6 @@ class PhotoVerifyBaseRequest(object):
     def __init__(self):
         self.data = {}
 
-    def to_dict(self):
-        raise NotImplemented()
-
-    def create_request_dict(self):
-        return self.to_dict()
-
     @staticmethod
     def create_name(first_name, last_name, middle_name, suffix):
         """
@@ -45,11 +39,18 @@ class PhotoVerifyBaseRequest(object):
         """
         return base.Image(hints=hints, image_data=image_data)
 
+    def to_dict(self):
+        d = {}
+        for key, value in self.data.items():
+            if isinstance(value, base.BasicModel):
+                value = value.to_dict()
+            d[key] = value
+        return d
 
-class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
 
-    def load(self, response_image_types, back_image, expected_name, front_image, issue_date, state_abbr,
-             esf_detection):
+class PhotoVerifyRequest(PhotoVerifyBaseRequest):
+
+    def load(self, response_image_types, back_image, expected_name, front_image, issue_date, state_abbr):
         """
         :param response_image_types: Image types
         :type response_image_types: list
@@ -63,8 +64,6 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
         :type issue_date: datetime.Datetime
         :param state_abbr: State abbreviation
         :type state_abbr: str
-        :param esf_detection: ESF data
-        :type esf_detection: mitek_mobile_verify.base.ESFDetection
         """
         self.response_image_types = response_image_types
         self.back_image = back_image
@@ -72,7 +71,6 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
         self.front_image = front_image
         self.issue_date = issue_date
         self.state_abbr = state_abbr
-        self.esf_detection = esf_detection
 
     @property
     def response_image_types(self):
@@ -164,6 +162,30 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
             raise ValueError('Value needs to be of type str')
         self.data['StateAbbr'] = s
 
+
+class PhotoVerifyAdvancedRequest(PhotoVerifyRequest):
+
+    def load(self, response_image_types, back_image, expected_name, front_image, issue_date, state_abbr, esf_detection):
+        """
+        :param response_image_types: Image types
+        :type response_image_types: list
+        :param back_image: Back image
+        :type back_image: mitek_mobile_verify.base.Image
+        :param expected_name: Expected name
+        :type expected_name: mitek_mobile_verify.base.Name
+        :param front_image: Front image
+        :type front_image: mitek_mobile_verify.base.Image
+        :param issue_date: Issue date
+        :type issue_date: datetime.Datetime
+        :param state_abbr: State abbreviation
+        :type state_abbr: str
+        :param esf_detection: ESF data
+        :type esf_detection: mitek_mobile_verify.base.ESFDetection
+        """
+        super(PhotoVerifyAdvancedRequest, self).load(response_image_types, back_image, expected_name, front_image,
+                                                     issue_date, state_abbr)
+        self.esf_detection = esf_detection
+
     @property
     def esf_detection(self):
         return self.data.get('EsfDetection')
@@ -189,11 +211,3 @@ class PhotoVerifyAdvancedRequest(PhotoVerifyBaseRequest):
         :rtype: mitek_mobile_verify.base.ESFDetection
         """
         return base.ESFDetection(extracted_data=extracted_data, performed_evaluation=performed_evaluation)
-
-    def to_dict(self):
-        d = {}
-        for key, value in self.data.items():
-            if isinstance(value, base.BasicModel):
-                value = value.to_dict()
-            d[key] = value
-        return d

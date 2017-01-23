@@ -3,7 +3,7 @@
 from zeep import Client
 from zeep.wsse.username import UsernameToken
 
-from mitek_mobile_verify.models.requests import PhotoVerifyAdvancedRequest
+from mitek_mobile_verify.models import requests
 
 __author__ = 'lundberg'
 
@@ -22,11 +22,13 @@ class MitekMobileVerifyService(object):
         :return: Schema object
         :rtype: zeep.objects.PhotoVerifyAdvancedRequest
         """
-        if isinstance(request, PhotoVerifyAdvancedRequest):
+        if isinstance(request, requests.PhotoVerifyRequest):
+            req = self.client.get_type('ns2:PhotoVerifyRequest')
+        elif isinstance(request, requests.PhotoVerifyAdvancedRequest):
             req = self.client.get_type('ns2:PhotoVerifyAdvancedRequest')
-            return req(**request.to_dict())
-
-        raise NotImplementedError('Request of type {} not implemented'.format(type(request)))
+        else:
+            raise NotImplementedError('Request of type {} not implemented'.format(type(request)))
+        return req(**request.to_dict())
 
     def verify(self, request, device_metadata, metadata, mibi_data_header):
         """

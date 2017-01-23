@@ -165,6 +165,6 @@ class TestPhotoVerifyAdvancedRequest(unittest.TestCase):
         self.request.load(response_image_types, back_image, expected_name, front_image, issue_date, state_abbr,
                           esf_detection)
 
-        self.assertEqual(self.request.create_request_dict(), self.ref_dict)
+        self.assertEqual(self.request.to_dict(), self.ref_dict)
 
 
