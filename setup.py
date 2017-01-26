@@ -5,7 +5,7 @@ setup(
     version='0.0.1b0',
     packages=['mitek_mobile_verify'],
     install_requires=[
-        'zeep==0.24.0'
+        'zeep==0.25.0'
     ],
     test_suite='nose2.collector.collector',
     tests_require=['nose2'],
