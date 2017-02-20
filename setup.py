@@ -2,10 +2,10 @@ from setuptools import setup
 
 setup(
     name='mitek_mobile_verify',
-    version='0.0.1b0',
+    version='0.0.2',
     packages=['mitek_mobile_verify'],
     install_requires=[
-        'zeep==0.25.0'
+        'zeep==1.0.0'
     ],
     test_suite='nose2.collector.collector',
     tests_require=['nose2'],

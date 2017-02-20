@@ -28,10 +28,10 @@ class PhotoVerifyBaseRequest(object):
         return base.Name(first_name=first_name, last_name=last_name, middle_name=middle_name, suffix=suffix)
 
     @staticmethod
-    def create_image(image_data, hints=None):
+    def create_image(image_data=None, hints=None):
         """
         :param image_data: Image as base64 encoded string
-        :type image_data: str
+        :type image_data: bytes
         :param hints: Image hints
         :type hints: list
         :return: Image object
@@ -146,8 +146,11 @@ class PhotoVerifyRequest(PhotoVerifyBaseRequest):
     def issue_date(self, dt):
         """
         :param dt: Issue date
-        :type dt: datetime.datetime
+        :type dt: datetime.datetime|None
         """
+        if dt is None:
+            self.data['IssueDate'] = None
+            return
         if not validators.is_datetime(dt):
             raise ValueError('Value needs to be of type datetime.datetime')
         self.data['IssueDate'] = dt

@@ -2,10 +2,13 @@
 
 from zeep import Client
 from zeep.wsse.username import UsernameToken
+import logging
 
 from mitek_mobile_verify.models import requests
 
 __author__ = 'lundberg'
+
+logger = logging.getLogger(__name__)
 
 
 class MitekMobileVerifyService(object):
@@ -14,6 +17,7 @@ class MitekMobileVerifyService(object):
         self.authentication = UsernameToken(username, password, use_digest=False)  # XXX digest true or false?
         self.client = Client(wsdl=wsdl, wsse=self.authentication, transport=transport, service_name=service_name,
                              port_name=port_name, plugins=plugins)
+        logger.info('{} initialized'.format(self.__name__))
 
     def _prepare_request(self, request):
         """
@@ -40,14 +44,15 @@ class MitekMobileVerifyService(object):
         :type metadata: mitek_mobile_verify.models.headers.WebRequestMetadataHeader
         :param mibi_data_header: Mibi data header
         :type mibi_data_header: mitek_mobile_verify.models.headers.MibiDataHeader
-        :return:
-        :rtype:
+        :return: response
+        :rtype: dict
         """
+        logger.info('verify method called')
         headers = {
             'DeviceMetaData': device_metadata.to_dict(),
             'Metadata': metadata.to_dict(),
             'MibiDataHeader': mibi_data_header.to_dict()
         }
         prepered_request = self._prepare_request(request)
-        self.client.service.Verify(prepered_request, _soapheaders=headers)
+        return self.client.service.Verify(prepered_request, _soapheaders=headers)
 

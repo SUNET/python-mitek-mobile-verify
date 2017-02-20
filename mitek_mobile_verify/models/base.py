@@ -15,10 +15,10 @@ class BasicModel(object):
 
 class Image(BasicModel):
 
-    def __init__(self, image_data, hints=None):
+    def __init__(self, image_data=None, hints=None):
         """
-        :param image_data: Image as base64 encoded string
-        :type image_data: str
+        :param image_data: Image data as a byte array
+        :type image_data: bytes
         :param hints: Hints
         :type hints: list|None
         """
@@ -53,9 +53,12 @@ class Image(BasicModel):
 
     @image_data.setter
     def image_data(self, s):
-        # Do our best to check if s is a base64 encoded string
-        if not validators.is_base64(s):
-            raise TypeError('Value needs to be a base64 encoded string')
+        if s is None:
+            self.data['ImageData'] = None
+            return
+        # Zeep will base64 encode the bytes when creating xml request
+        if not validators.is_string(s):
+            raise TypeError('Value needs to be a string')
         self.data['ImageData'] = s
 
 

@@ -1,34 +1,33 @@
 # -*- coding: utf-8 -*-
 
 import six
-import base64
+import logging
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 __author__ = 'lundberg'
 
 
 def is_string(s):
-    if s is None or isinstance(s, six.string_types):
+    if s is None or isinstance(s, six.string_types) or isinstance(s, bytes):
+        # Apparently bytes needs to go in the KeyValueOfstringstring structure
         return True
+    logger.error('{} {} not string or bytes'.format(type(s), s))
     return False
 
 
 def is_bool(b):
     if b is None or isinstance(b, bool):
         return True
-    return False
-
-
-def is_base64(s):
-    enc = base64.b64encode(base64.b64decode(s))
-    if enc == s:
-        return True
+    logger.error('{} {} not bool'.format(type(b), b))
     return False
 
 
 def is_datetime(dt):
     if isinstance(dt, datetime):
         return True
+    logger.error('{} {} not datetime'.format(type(dt), dt))
     return False
 
 
