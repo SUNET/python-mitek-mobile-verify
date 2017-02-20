@@ -17,7 +17,7 @@ class MitekMobileVerifyService(object):
         self.authentication = UsernameToken(username, password, use_digest=False)  # XXX digest true or false?
         self.client = Client(wsdl=wsdl, wsse=self.authentication, transport=transport, service_name=service_name,
                              port_name=port_name, plugins=plugins)
-        logger.info('{} initialized'.format(self.__name__))
+        logger.info('{} initialized'.format(self.__class__))
 
     def _prepare_request(self, request):
         """
