@@ -165,6 +165,9 @@ class PhotoVerifyRequest(PhotoVerifyBaseRequest):
         :param s: State abbreviation
         :type s: str
         """
+        if s is None:
+            self.data['StateAbbr'] = None
+            return
         if not validators.is_string(s):
             raise ValueError('Value needs to be of type str')
         self.data['StateAbbr'] = s
