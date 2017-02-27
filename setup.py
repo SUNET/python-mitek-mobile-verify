@@ -11,6 +11,7 @@ setup(
     tests_require=['nose2'],
     url='https://github.com/SUNET/python-mitek-mobile-verify',
     license='',
+    zip_safe=False,
     author='Johan Lundberg',
     author_email='lundberg@sunet.se',
     description='Implementation of Mitek SOAP service for drivers license verification'
