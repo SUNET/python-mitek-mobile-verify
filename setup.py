@@ -3,8 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='mitek_mobile_verify',
     version='0.0.2',
-    package_dir={'':'mitek_mobile_verify'},
-    packages=find_packages('mitek_mobile_verify', exclude=['tests']),
+    packages=find_packages(exclude=['tests']),
     install_requires=[
         'zeep==1.0.0'
     ],
