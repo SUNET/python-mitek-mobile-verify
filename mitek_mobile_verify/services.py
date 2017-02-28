@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from zeep import Client
+from zeep.helpers import serialize_object
 from zeep.wsse.username import UsernameToken
 import logging
 
@@ -45,7 +46,7 @@ class MitekMobileVerifyService(object):
         :param mibi_data_header: Mibi data header
         :type mibi_data_header: mitek_mobile_verify.models.headers.MibiDataHeader
         :return: response
-        :rtype: dict
+        :rtype: OrderedDict
         """
         logger.info('verify method called')
         headers = {
@@ -54,5 +55,6 @@ class MitekMobileVerifyService(object):
             'MibiDataHeader': mibi_data_header.to_dict()
         }
         prepered_request = self._prepare_request(request)
-        return self.client.service.Verify(prepered_request, _soapheaders=headers)
+        response = self.client.service.Verify(prepered_request, _soapheaders=headers)
+        return serialize_object(response)
 
